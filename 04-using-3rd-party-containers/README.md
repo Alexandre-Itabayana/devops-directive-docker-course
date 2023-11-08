@@ -39,6 +39,11 @@ Let's experiment with how installing something into a container at runtime behav
 # Create a container from the ubuntu image
 docker run --interactive --tty --rm ubuntu:22.04
 
+#Create a container with  Windows Display using Xming
+docker run -it --tty -e DISPLAY=Xming:0.0 --name ubuntu_gui ubuntu:22.04
+#Try and get xfce4
+apt-get update && apt-get install -y xfce4 && apt-get install -y xfce4-goodies
+
 # Try to ping google.com
 ping google.com -c 1 # This results in `bash: ping: command not found`
 

@@ -1,27 +1,24 @@
-DATABASE_URL:=postgres://postgres:foobarbaz@localhost:5432/postgres
-
-.PHONY: run-postgres
-run-postgres:
-	@echo Starting postgres container
-	-docker run \
-		-e POSTGRES_PASSWORD=foobarbaz \
-		-v pgdata:/var/lib/postgresql/data \
-		-p 5432:5432 \
-		postgres:15.1-alpine
+DATABASE_URL=mysql://39rkpfhpwqb5m65oh94p:pscale_pw_wB6YJjvseryk2rANdefwqtcYlWRB4OSTKgcLUWfmU5g@aws.connect.psdb.cloud/xperience?ssl={"rejectUnauthorized":true}
+  
+.PHONY: run-mysql
+run-mysql:
+	@echo Starting mysql container
+	-docker run -d --rm \
+  		-v mysqldata:/var/lib/mysql \
+  		-e MYSQL_ROOT_PASSWORD=pscale_pw_wB6YJjvseryk2rANdefwqtcYlWRB4OSTKgcLUWfmU5g \
+  		mysql:8.0.32
 
 .PHONY: run-api-node
 run-api-node:
 	@echo Starting node api
-	cd api-node && \
-		DATABASE_URL=${DATABASE_URL} \
-		npm run dev
+	(SET DATABASE_URL=${DATABASE_URL} && cd api-node && npm run dev)
 
 .PHONY: run-api-golang
 run-api-golang:
 	@echo Starting golang api
-	cd api-golang && \
-		DATABASE_URL=${DATABASE_URL} \
-		go run main.go
+	(SET DATABASE_URL=${DATABASE_URL} cd api-golang && go run main.go)
+		 
+		
 
 .PHONY: run-client-react
 run-client-react:

@@ -1,19 +1,34 @@
-const { getDateTime } = require('./db');
-
+//require('dotenv').config();
+/* const { getDateTime } = require('./db');
+const morgan = require('morgan') */
 const express = require('express');
-const morgan = require('morgan');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// setup the logger
-app.use(morgan('tiny'));
+/* app.use(morgan('tiny')); */
+
+
+const dbURL = process.env.DATABASE_URL;
+const mysql = require('mysql');
+const connection = mysql.createConnection(dbURL);
+connection.connect();
 
 app.get('/', async (req, res) => {
-  const dateTime = await getDateTime();
+/*   const dateTime = await getDateTime();
   const response = dateTime;
   response.api = 'node';
-  res.send(response);
+  res.send(response); */
+  var response = connection.query('SELECT NOW() as date;', (err,rows,fields)=>{
+    if(err) throw err;
+    response.rows = JSON.parse(JSON.stringify(rows));
+    const responseData = [
+      response.rows[0].date,
+      'node'
+    ];
+    res.json(responseData )
+  })
+
 });
 
 app.get('/ping', async (_, res) => {
