@@ -1,11 +1,12 @@
-DATABASE_URL=mysql://39rkpfhpwqb5m65oh94p:pscale_pw_wB6YJjvseryk2rANdefwqtcYlWRB4OSTKgcLUWfmU5g@aws.connect.psdb.cloud/xperience?ssl={"rejectUnauthorized":true}
-  
+
+include .$(PWD)/.env
+
 .PHONY: run-mysql
 run-mysql:
 	@echo Starting mysql container
 	-docker run -d --rm \
   		-v mysqldata:/var/lib/mysql \
-  		-e MYSQL_ROOT_PASSWORD=pscale_pw_wB6YJjvseryk2rANdefwqtcYlWRB4OSTKgcLUWfmU5g \
+  		-e MYSQL_ROOT_PASSWORD=${DATABASE_PASS} \
   		mysql:8.0.32
 
 .PHONY: run-api-node
